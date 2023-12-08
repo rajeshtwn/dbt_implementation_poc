@@ -1,0 +1,23 @@
+{% macro reprocess_rejection_sales(temp_model) %}
+    INSERT INTO {{ temp_model }}
+    SELECT
+        r.LOCATION_KEY AS LOCATION_KEY,
+        r.ITEM_KEY AS ITEM_KEY,
+        r.TXN_ID AS TXN_ID,
+        r.TXN_DT AS TXN_DT,
+        r.LOCATION_ID AS LOCATION_ID,
+        r.PRODUCT_ID AS PRODUCT_ID,
+        r.F_SLS_RTL AS F_SLS_RTL,
+        r.F_SLS_QTY AS F_SLS_QTY,
+        r.F_SLS_CST AS F_SLS_CST
+    FROM DBT_POC_DB.DBT_POC_REJ.REJ_SALES r
+    LEFT JOIN DBT_POC_DB.DBT_POC_TGT.TGT_LOCATION l ON r.LOCATION_ID = l.LOCATION_ID
+    LEFT JOIN DBT_POC_DB.DBT_POC_TGT.TGT_PRODUCT p ON r.PRODUCT_ID = p.ITEM_ID
+    WHERE l.LOCATION_ID IS NOT NULL OR p.ITEM_ID IS NOT NULL
+    AND (r.TXN_ID, r.BATCH_DATE) IN (
+        SELECT TXN_ID, MAX(BATCH_DATE)
+        FROM DBT_POC_DB.DBT_POC_REJ.REJ_SALES
+        WHERE TXN_ID NOT IN (SELECT TXN_ID FROM {{ temp_model }})
+        GROUP BY TXN_ID
+    );
+{% endmacro %}

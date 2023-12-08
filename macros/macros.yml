@@ -1,0 +1,14 @@
+version: 2
+
+macros:
+  - name: inventory_data_mart
+    arguments:
+      - name: source_model
+  - name: get_update_statement
+    arguments:
+      - name: scd_typ2_col
+  - name: get_scd_typ2_cols
+
+
+
+

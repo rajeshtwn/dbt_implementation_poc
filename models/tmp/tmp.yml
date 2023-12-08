@@ -1,0 +1,98 @@
+
+version: 2
+
+models:
+  - name: tmp_location
+    description: "Temp Table for Locations"
+    config:
+      contract:
+        enforced: false
+    columns:
+      - name: rcd_upd_ts
+        description: "Timestamp for record updates"
+        data_type: TIMESTAMP
+      - name: location_id
+        description: "The ID of the location"
+        data_type: VARCHAR(100)
+        tests:
+          - unique
+          - not_null:
+              config:
+                store_failures: false
+      - name: name
+        description: "The name of the location"
+        data_type: varchar(16777216)
+      - name: address1
+        description: "Address line 1"
+        data_type: varchar(16777216)
+      - name: address2
+        description: "Address line 2"
+        data_type: varchar(16777216)
+      - name: city
+        description: "City"
+        data_type: varchar(16777216)
+      - name: zip
+        description: "ZIP code"
+        data_type: varchar(16777216)
+      - name: province
+        description: "Province"
+        data_type: varchar(16777216)
+      - name: country
+        description: "Country"
+        data_type: varchar(16777216)
+      - name: phone
+        description: "Phone number"
+        data_type: varchar(16777216)
+      - name: created_at
+        description: "Timestamp for creation"
+        data_type: TIMESTAMP
+      - name: country_code
+        description: "Country code"
+        data_type: varchar(16777216)
+      - name: country_name
+        description: "Country name"
+        data_type: varchar(16777216)
+      - name: province_code
+        description: "Province code"
+        data_type: varchar(16777216)
+      - name: legacy
+        description: "Legacy flag"
+        data_type: boolean
+      - name: active
+        description: "Active flag"
+        data_type: boolean
+      - name: admin_graphql_api_id
+        description: "Admin GraphQL API ID"
+        data_type: varchar(16777216)
+      - name: localized_country_name
+        description: "Localized country name"
+        data_type: varchar(16777216)
+      - name: localized_province_name
+        description: "Localized province name"
+        data_type: varchar(16777216)
+
+  - name: tmp_sales
+    description: "Temp Table for Sales"
+    columns:
+      - name: location_id
+        description: "Foreign key to tgt_location table"
+        data_type: VARCHAR(100)
+        tests:
+          - relationships:
+              to: ref('tgt_location')
+              field: location_id
+              config:
+                store_failures: true
+      - name: product_id
+        description: "Foreign key to tgt_product table"
+        data_type: VARCHAR(100)
+        # tests:
+        #   - dbt_constraints.foreign_key:
+        #       pk_table_name: ref('tgt_product')
+        #       pk_column_name: ITEM_ID
+        #       store_failures: true
+        tests:
+          - dbt_utils.cardinality_equality:
+              field: ITEM_ID
+              to: ref('tgt_product')
+              store_failures: true

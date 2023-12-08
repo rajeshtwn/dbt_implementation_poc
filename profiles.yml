@@ -1,0 +1,13 @@
+dbt_poc:
+  outputs:
+    dev:
+      account: logicinformationsystems.us-east-1
+      database: DBT_POC_DB
+      password: Sn0wP@rk
+      role: DEVELOPER
+      schema: DBT
+      threads: 4
+      type: snowflake
+      user: SNOWPARK
+      warehouse: DJ_WAREHOUSE
+  target: dev
