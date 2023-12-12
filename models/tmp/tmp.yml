@@ -15,6 +15,7 @@ models:
         description: "The ID of the location"
         data_type: VARCHAR(100)
         tests:
+          - check_primary_key_duplicates
           - unique
           - not_null:
               config:
@@ -96,3 +97,12 @@ models:
               field: ITEM_ID
               to: ref('tgt_product')
               store_failures: true
+
+  - name: tmp_product
+    columns:
+      - name: ITEM_ID
+        tests:
+          - check_primary_key_duplicates
+          - unique
+          - not_null
+          

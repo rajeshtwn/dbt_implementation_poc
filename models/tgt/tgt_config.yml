@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  # - name: tgt_sales
+  #   columns:
+  #     - name: ITEM_KEY,LOCATION_KEY
+  #       tests:
+  #         - relationships1:
+  #             to: ref('tgt_product')
+  #             field: ITEM_KEY
+  #             to1: ref('tgt_location')
+  #             field1: LOCATION_KEY
+              
+  - name: tgt_sales
+    columns:
+      - name: ITEM_KEY,LOCATION_KEY,ITEM_KEY
+        tests:
+          - check_foreign_key_references1:
+              to: ref('tgt_product'),ref('tgt_location'),ref('tgt_product')
+              field: ITEM_KEY,LOCATION_KEY,ITEM_KEY
+
+  - name: tgt_inv_ild_b
+    columns:
+      - name: ITEM_KEY
+        tests:
+          - check_foreign_key_references1:
+              to: ref('tgt_product')
+              field: ITEM_KEY

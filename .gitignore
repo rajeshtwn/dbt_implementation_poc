@@ -2,3 +2,4 @@ target/
 .vscode/
 dbt_packages/
 logs/
+*.exe
